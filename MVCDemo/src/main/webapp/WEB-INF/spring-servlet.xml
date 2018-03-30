@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+   
+    <context:component-scan base-package="com.vaibhav"></context:component-scan>
+    
+    <!--hibernate Template  -->
+    <bean id="ht" class="org.springframework.orm.hibernate5.HibernateTemplate">
+    <property name="sessionFactory" ref="sf"></property>
+    </bean>
+    
+    <!-- sesseionFactory -->
+    <bean id="sf" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <property name="dataSource" ref="ds"></property>
+    <property name="annotatedClasses">
+    <value>com.vaibhav.model.Employee</value>
+    </property>
+    <property name="hibernateProperties">
+    <value>
+             hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+             hibernate.show_sql=true
+             hibernate.hbm2ddl.auto=update
+    
+    </value>
+    </property>
+    </bean>
+    
+    <!--DataSource  -->
+    <bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+<property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"></property>
+<property name="username" value="system"></property>
+<property name="password" value="suhane"></property>
+    
+    </bean>
+    
+    <!-- Transection Manager -->
+    <bean id="txm" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sf"></property>
+    </bean>
+    <tx:annotation-driven transaction-manager="txm"/>
+    
+    <!-- handermapping class  -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+    
+    <!-- viweResover -->
+    <bean id="vr" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="suffix" value=".jsp"></property>
+    <property name="prefix" value="/jsps/"></property>
+    </bean>
+</beans>
